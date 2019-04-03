@@ -1,0 +1,5 @@
+﻿{
+  "ConnectionStrings": {
+    "Movies": "Server=bitsql.wctc.edu;Database=Movies_##_XXX;User ID=YYYY;Password=ZZZZ"
+  }
+}
