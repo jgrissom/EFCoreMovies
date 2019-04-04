@@ -21,5 +21,22 @@ namespace EFCoreMovies.Models
 
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Movies"));
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // define the PK for MovieGenre
+            modelBuilder.Entity<MovieGenre>()
+                .HasKey(mg => new { mg.MovieId, mg.GenreId });
+            // movies can have many genres
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Movie)
+                .WithMany(m => m.MovieGenres)
+                .HasForeignKey(mg => mg.MovieId);
+            // genres can have many movies
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Genre)
+                .WithMany(g => g.MovieGenres)
+                .HasForeignKey(mg => mg.GenreId);
+        }
     }
 }
