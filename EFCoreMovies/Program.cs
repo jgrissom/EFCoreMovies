@@ -16,8 +16,8 @@ namespace EFCoreMovies
             using (var context = new MovieContext())
             {
                 StreamReader sr = new StreamReader("movies.csv");
-                // if the text file is empty, do not seed
-                if (!sr.EndOfStream)
+                // if there are records in the database, or text file is empty, do not seed
+                if (context.Movies.Count() == 0 && !sr.EndOfStream)
                 {
                     // skip first line of data file
                     sr.ReadLine();
@@ -54,15 +54,17 @@ namespace EFCoreMovies
                     }
                     // close file when done
                     sr.Close();
+                    // commit updates to database
+                    context.SaveChanges();
                 }
                 else
                 {
                     logger.Info("Database NOT seeded");
                 }
                 // log results
-                logger.Info($"{context.Movies.Local.Count()} Movies");
-                logger.Info($"{context.Genres.Local.Count()} Genres");
-                logger.Info($"{context.MovieGenres.Local.Count()} MovieGenres");
+                logger.Info($"{context.Movies.Count()} Movies");
+                logger.Info($"{context.Genres.Count()} Genres");
+                logger.Info($"{context.MovieGenres.Count()} MovieGenres");
             }
 
             logger.Info("Program ended");
